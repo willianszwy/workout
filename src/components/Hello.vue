@@ -1,16 +1,17 @@
 <template>
   <div class="hello">
-    
+    <v-card>
+    <v-container>
     <div class="progress-circular-center">  
     
         <v-progress-circular
           v-bind:size="380"
           v-bind:width="50"
           v-bind:rotate="-90"
-          v-bind:value="value"
+          v-bind:value="chronometer.percent"
           class="teal--text my-5">
         
-          <p class="progress-circular-text">{{ timeLabel }}</p>
+          <p class="progress-circular-text">{{ chronometer.time }}</p>
 
          </v-progress-circular>        
     </div>
@@ -32,46 +33,47 @@
          <v-btn block large @click.native="reset()">RESET</v-btn>
        </v-flex> 
     </v-layout>
+
+    <v-layout>
+      <v-list two-line>
+        <v-list-tile><v-list-tile-content>Preper: {{ preper }}</v-list-tile-content></v-list-tile>
+         <v-divider></v-divider>
+        <v-list-tile><v-list-tile-content>Workout: {{ workout }}</v-list-tile-content></v-list-tile>
+         <v-divider></v-divider>
+        <v-list-tile><v-list-tile-content>Interval: {{ interval }}</v-list-tile-content></v-list-tile>
+         <v-divider></v-divider>
+        <v-list-tile><v-list-tile-content>Repetition: {{ repetition }}</v-list-tile-content></v-list-tile>
+      </v-list>
+    </v-layout>
+    </v-container>
+    </v-card>
   </div>  
 </template>
 
 <script>
 
-import Timer from 'easytimer'
+import { mapState, mapMutations, mapActions } from 'vuex'
 
 export default {
   name: 'hello',
-  data () {
-    return {
-      timer: new Timer(),
-      value: 100,
-      timeLabel: '00:00'
-    }
-  },
   methods: {
-    reset () {
-      this.timer.stop()
-      this.timeLabel = '00:00'
-      this.value = 100
-    },
-    start () {
-      this.timer.start({countdown: true,
-        startValues: {seconds: 20}})
-      this.timer.addEventListener('secondsUpdated', this.updateLabel)
-    },
-    stop () {
-      this.timer.pause()
-    },
-    updateLabel (timeCounter) {
-      this.timeLabel = this.timer.getTimeValues().toString(['minutes', 'seconds'])
-      this.value = (this.timer.getTotalTimeValues().seconds / 20) * 100
-    }
+    ...mapActions(['start']),
+    ...mapMutations(['reset', 'stop'])
+  },
+  computed: {
+    ...mapState([
+      'preper',
+      'workout',
+      'interval',
+      'repetition',
+      'chronometer'
+    ])
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style land="scss">
+<style>
 
  .progress-circular-center {
    display: flex;
