@@ -1,52 +1,43 @@
 <template>
   <div class="hello">
-    <v-card>
-    <v-container>
-    <div class="progress-circular-center">  
+   
     
-        <v-progress-circular
-          v-bind:size="380"
-          v-bind:width="50"
-          v-bind:rotate="-90"
-          v-bind:value="chronometer.percent"
-          class="teal--text my-5">
-        
-          <p class="progress-circular-text">{{ chronometer.time }}</p>
-
-         </v-progress-circular>        
+    <div class="progress-center my-5">
+          <h2 class="text-xs-center">WORKOUT</h2> 
+          <p class="progress-text">{{ chronometer.display }}</p>
     </div>
 
 
-    <v-layout row justify-space-between>
-       <v-flex xs4>
-         <v-btn error block dark large @click.native="stop()">STOP</v-btn>
-       </v-flex>
-       <v-flex xs4>
-        <v-btn 
+   
+      <template v-if="chronometer.running">
+       <v-layout row wrap>
+         <v-flex xs6>
+          <v-btn  warning large round block dark @click.native="chronometer/stop()">PAUSE</v-btn>
+          </v-flex>
+          <v-flex xs6>
+            <v-btn error round block dark large @click.native="chronometer/reset()">STOP</v-btn>
+          </v-flex>
+        </v-layout>
+      </template>
+      <template v-else>
+       <v-layout row wrap>
+         <v-flex xs12>
+         <v-btn 
           success 
-          block 
-          dark 
+          round
+          block
+          dark
           large
           @click.native="start()">START</v-btn>
-       </v-flex>
-       <v-flex xs4>
-         <v-btn block large @click.native="reset()">RESET</v-btn>
-       </v-flex> 
-    </v-layout>
+          </v-flex>
+        </v-layout>
+      </template>
+  
+   
 
-    <v-layout>
-      <v-list two-line>
-        <v-list-tile><v-list-tile-content>Preper: {{ preper }}</v-list-tile-content></v-list-tile>
-         <v-divider></v-divider>
-        <v-list-tile><v-list-tile-content>Workout: {{ workout }}</v-list-tile-content></v-list-tile>
-         <v-divider></v-divider>
-        <v-list-tile><v-list-tile-content>Interval: {{ interval }}</v-list-tile-content></v-list-tile>
-         <v-divider></v-divider>
-        <v-list-tile><v-list-tile-content>Repetition: {{ repetition }}</v-list-tile-content></v-list-tile>
-      </v-list>
-    </v-layout>
-    </v-container>
-    </v-card>
+   
+   
+   
   </div>  
 </template>
 
@@ -75,13 +66,15 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
 
- .progress-circular-center {
+ .progress-center {
    display: flex;
    justify-content: center;
+   flex-direction: column;
  }
 
- .progress-circular-text {
+ .progress-text {
     font-size: 7em;
+    text-align: center;
  }
 
 

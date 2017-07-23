@@ -1,13 +1,12 @@
 <template>
   
-  <v-app  standalone>
+  <v-app toolbar>
+
     <v-navigation-drawer
       temporary
       v-model="drawer" 
       :mini-variant.sync="mini" 
-      light 
-      overflow
-      absolute>
+      light >
 
        <v-list class="pa-0">
         <v-list-tile avatar tag="div">
@@ -42,11 +41,13 @@
       <v-toolbar-side-icon @click.native.stop="drawer = !drawer"></v-toolbar-side-icon>
       <v-toolbar-title>Workout</v-toolbar-title>
     </v-toolbar>
-    <main>
 
+    <main>
+      <v-card flat height="93vh">
       <v-container fluid>
          <router-view></router-view>
       </v-container>
+     </v-card>
     </main>
 
 
@@ -78,6 +79,6 @@ export default {
 
 <style>
 
-html { overflow-y: auto; }  
+html { overflow-y: auto; }
 
 </style>
