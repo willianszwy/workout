@@ -3,8 +3,9 @@
    
     
     <div class="progress-center my-5">
-          <h2 class="text-xs-center">WORKOUT</h2> 
+          <h2 class="text-xs-center">{{ progressText }}</h2> 
           <p class="progress-text">{{ chronometer.display }}</p>
+          <p class="text-xs-center">{{repetitionCount}}/{{repetition}}</p>
     </div>
 
 
@@ -12,10 +13,10 @@
       <template v-if="chronometer.running">
        <v-layout row wrap>
          <v-flex xs6>
-          <v-btn  warning large round block dark @click.native="chronometer/stop()">PAUSE</v-btn>
+          <v-btn  warning large round block dark @click.native="stop()">PAUSE</v-btn>
           </v-flex>
           <v-flex xs6>
-            <v-btn error round block dark large @click.native="chronometer/reset()">STOP</v-btn>
+            <v-btn error round block dark large @click.native="reset()">STOP</v-btn>
           </v-flex>
         </v-layout>
       </template>
@@ -43,13 +44,51 @@
 
 <script>
 
-import { mapState, mapMutations, mapActions } from 'vuex'
+import { mapState } from 'vuex'
 
 export default {
   name: 'hello',
+  data () {
+    return {
+      progressText: '',
+      repetitionCount: 0,
+      cancel: false,
+      paused: false
+    }
+  },
   methods: {
-    ...mapActions(['start']),
-    ...mapMutations(['reset', 'stop'])
+    start () {
+      if (this.paused) {
+        this.paused = false
+        this.$store.commit('chronometer/continue')
+      } else {
+        this.progressText = 'PREPARE'
+        this.$store.dispatch('chronometer/start', this.preper).then(resolve => {
+          this.progressText = 'WORKOUT'
+          this.loop()
+        }).catch()
+      }
+    },
+    stop () {
+      this.paused = true
+      this.$store.commit('chronometer/stop')
+    },
+    reset () {
+      this.cancel = true
+      this.repetitionCount = 0
+      this.progressText = ''
+      this.$store.commit('chronometer/reset')
+    },
+    async loop () {
+      for (this.repetitionCount = 0; this.repetitionCount < this.repetition; this.repetitionCount++) {
+        this.progressText = 'WORKOUT'
+        await this.$store.dispatch('chronometer/start', this.workout).catch()
+        this.progressText = 'REST'
+        await this.$store.dispatch('chronometer/start', this.interval).catch()
+      }
+      this.progressText = ''
+      this.repetitionCount = 0
+    }
   },
   computed: {
     ...mapState([
