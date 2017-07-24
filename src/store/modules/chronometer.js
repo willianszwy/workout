@@ -1,15 +1,17 @@
 import Timer from 'easytimer'
 
 export default {
+  namespaced: true,
   state: {
     timer: new Timer(),
     display: '00:00',
-    startValue: 0,
-    running: false
+    running: false,
+    cancel: false
   },
   mutations: {
     end (state) {
       state.running = false
+      state.cancel = false
     },
     update (state) {
       state.display = state.timer.getTimeValues().toString(['minutes', 'seconds'])
@@ -21,25 +23,30 @@ export default {
     reset (state) {
       state.timer.stop()
       state.display = '00:00'
-      state.startValue = 0
       state.running = false
+      state.cancel = true
     }
   },
   actions: {
-    start ({ state, commit, rootState }) {
+    start ({ state, commit, rootState }, startValue) {
       if (!state.timer.isRunning()) {
-        state.startValue = rootState.workout
         state.running = true
 
         state.timer.start({countdown: true,
-          startValues: {seconds: state.startValue},
+          startValues: {seconds: startValue},
           callback: function () {
             commit('update')
           }})
+      }
+      return new Promise((resolve, reject) => {
         state.timer.addEventListener('targetAchieved', function (e) {
           commit('end')
+          resolve('stopped')
         })
-      }
+        state.timer.addEventListener('stopped', function (e) {
+          reject()
+        })
+      })
     }
   }
 }

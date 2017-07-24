@@ -1,30 +1,16 @@
 <template>
-    <v-card>
-      <v-container flex>
-       <v-card-title primary-title>
-          <h5>Configuration <v-icon>settings</v-icon></h5>
-        </v-card-title>
-        
+  <div>      
         
         <v-card-text>
            <v-slider :value="preper" @input="setPreper" step="5" label="Preper" thumb-label snap></v-slider>
-           <h5>{{preper}} sec</h5>
-        </v-card-text>
-
-        
-        <v-card-text>
+           <p>{{preper}} sec</p>
+       
            <v-slider :value="workout" @input="setWorkout" step="5" label="Workout" thumb-label snap></v-slider>
-           <h5>{{workout}} sec</h5>
-        </v-card-text>
-
+           <p>{{workout}} sec</p>
         
-        <v-card-text>
            <v-slider :value="interval" @input="setInterval" step="5" label="Interval" thumb-label snap></v-slider>
-           <h5>{{interval}} sec</h5>
-        </v-card-text>
-
-        
-        <v-card-text>
+           <p>{{interval}} sec</p>
+       
            <v-slider :value="repetition" 
                     @input="setRepetition" 
                     step="1" 
@@ -32,11 +18,10 @@
                     thumb-label
                     max="10"
                     snap></v-slider>
-                    <h5>{{repetition}} x</h5>
+                    <p>{{repetition}} x</p>
         </v-card-text>
 
-      </v-container>
-    </v-card>
+      </div>
 </template>
 
 <script>

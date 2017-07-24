@@ -6,10 +6,10 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    preper: 0,
+    preper: 5,
     workout: 10,
-    interval: 0,
-    repetition: 0
+    interval: 5,
+    repetition: 3
   },
   modules: {
     chronometer
