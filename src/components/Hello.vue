@@ -6,9 +6,7 @@
           <h2 class="text-xs-center">{{ progressText }}</h2> 
           <p class="progress-text">{{ chronometer.display }}</p>
           <p class="text-xs-center">{{repetitionCount}}/{{repetition}}</p>
-    </div>
-
-
+    </div>    
    
       <template v-if="chronometer.running">
        <v-layout row wrap>
@@ -33,11 +31,6 @@
           </v-flex>
         </v-layout>
       </template>
-  
-   
-
-   
-   
    
   </div>  
 </template>
@@ -51,15 +44,12 @@ export default {
   data () {
     return {
       progressText: '',
-      repetitionCount: 0,
-      cancel: false,
-      paused: false
+      repetitionCount: 0
     }
   },
   methods: {
     start () {
-      if (this.paused) {
-        this.paused = false
+      if (this.chronometer.timer.isPaused()) {
         this.$store.commit('chronometer/continue')
       } else {
         this.progressText = 'PREPARE'
@@ -70,14 +60,15 @@ export default {
       }
     },
     stop () {
-      this.paused = true
       this.$store.commit('chronometer/stop')
     },
     reset () {
-      this.cancel = true
-      this.repetitionCount = 0
-      this.progressText = ''
+      this.clear()
       this.$store.commit('chronometer/reset')
+    },
+    clear () {
+      this.progressText = ''
+      this.repetitionCount = 0
     },
     async loop () {
       for (this.repetitionCount = 0; this.repetitionCount < this.repetition; this.repetitionCount++) {
@@ -86,8 +77,7 @@ export default {
         this.progressText = 'REST'
         await this.$store.dispatch('chronometer/start', this.interval).catch()
       }
-      this.progressText = ''
-      this.repetitionCount = 0
+      this.clear()
     }
   },
   computed: {

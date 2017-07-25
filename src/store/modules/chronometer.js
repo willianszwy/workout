@@ -5,13 +5,14 @@ export default {
   state: {
     timer: new Timer(),
     display: '00:00',
-    running: false,
-    cancel: false
+    running: false
   },
   mutations: {
     end (state) {
       state.running = false
-      state.cancel = false
+    },
+    beep (state) {
+      document.querySelector('audio#beep').play()
     },
     update (state) {
       state.display = state.timer.getTimeValues().toString(['minutes', 'seconds'])
@@ -24,7 +25,6 @@ export default {
       state.timer.stop()
       state.display = '00:00'
       state.running = false
-      state.cancel = true
     },
     continue (state) {
       state.timer.start()
@@ -41,6 +41,9 @@ export default {
           callback: function () {
             commit('update')
           }})
+        state.timer.addEventListener('started', function (e) {
+          commit('beep')
+        })
       }
       return new Promise((resolve, reject) => {
         state.timer.addEventListener('targetAchieved', function (e) {
