@@ -2,11 +2,7 @@
   <div class="hello">
    
     
-    <div class="progress-center my-5">
-          <h2 class="text-xs-center">{{ chronometer.action }}</h2> 
-          <p class="progress-text">{{ chronometer.display }}</p>
-          <h5 class="text-xs-center">{{chronometer.counter}}/{{repetition}}</h5>
-    </div>    
+      <chronometer></chronometer>  
    
       <template v-if="chronometer.running">
        <v-layout row wrap>
@@ -38,9 +34,13 @@
 <script>
 
 import { mapState } from 'vuex'
+import Chronometer from './Chronometer.vue'
 
 export default {
   name: 'hello',
+  components: {
+    Chronometer
+  },
   methods: {
     start () {
       this.$store.dispatch('chronometer/run')

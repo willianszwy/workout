@@ -23,17 +23,17 @@
 
     </v-navigation-drawer>
     
-    <v-toolbar fixed class="light-blue" prominent dark>
+    <v-toolbar  class="light-blue" prominent dark>
       <v-toolbar-side-icon @click.native.stop="drawer = !drawer"></v-toolbar-side-icon>
       <v-toolbar-title>Workout</v-toolbar-title>
     </v-toolbar>
 
     <main>
-      <v-card flat>
+      <!-- <v-card flat> -->
       <v-container fluid>
          <router-view></router-view>
       </v-container>
-     </v-card>
+     <!-- </v-card> -->
     </main>
 
     <audio src="static/songs/beep-06.mp3" id="beep"></audio>

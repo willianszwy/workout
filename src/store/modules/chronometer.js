@@ -5,7 +5,7 @@ export default {
   state: {
     timer: new Timer(),
     display: '00:00',
-    action: '',
+    action: 'PRESS START',
     running: false,
     counter: 0
   },
@@ -36,7 +36,7 @@ export default {
     },
     clear (state) {
       state.counter = 0
-      state.action = ''
+      state.action = 'PRESS START'
     }
   },
   actions: {
