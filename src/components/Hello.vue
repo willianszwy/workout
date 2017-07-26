@@ -3,9 +3,9 @@
    
     
     <div class="progress-center my-5">
-          <h2 class="text-xs-center">{{ progressText }}</h2> 
+          <h2 class="text-xs-center">{{ chronometer.action }}</h2> 
           <p class="progress-text">{{ chronometer.display }}</p>
-          <p class="text-xs-center">{{repetitionCount}}/{{repetition}}</p>
+          <h5 class="text-xs-center">{{chronometer.counter}}/{{repetition}}</h5>
     </div>    
    
       <template v-if="chronometer.running">
@@ -41,43 +41,15 @@ import { mapState } from 'vuex'
 
 export default {
   name: 'hello',
-  data () {
-    return {
-      progressText: '',
-      repetitionCount: 0
-    }
-  },
   methods: {
     start () {
-      if (this.chronometer.timer.isPaused()) {
-        this.$store.commit('chronometer/continue')
-      } else {
-        this.progressText = 'PREPARE'
-        this.$store.dispatch('chronometer/start', this.preper).then(resolve => {
-          this.progressText = 'WORKOUT'
-          this.loop()
-        }).catch()
-      }
+      this.$store.dispatch('chronometer/run')
     },
     stop () {
       this.$store.commit('chronometer/stop')
     },
     reset () {
-      this.clear()
       this.$store.commit('chronometer/reset')
-    },
-    clear () {
-      this.progressText = ''
-      this.repetitionCount = 0
-    },
-    async loop () {
-      for (this.repetitionCount = 0; this.repetitionCount < this.repetition; this.repetitionCount++) {
-        this.progressText = 'WORKOUT'
-        await this.$store.dispatch('chronometer/start', this.workout).catch()
-        this.progressText = 'REST'
-        await this.$store.dispatch('chronometer/start', this.interval).catch()
-      }
-      this.clear()
     }
   },
   computed: {

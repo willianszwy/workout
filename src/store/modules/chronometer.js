@@ -5,7 +5,9 @@ export default {
   state: {
     timer: new Timer(),
     display: '00:00',
-    running: false
+    action: '',
+    running: false,
+    counter: 0
   },
   mutations: {
     end (state) {
@@ -26,16 +28,23 @@ export default {
       state.display = '00:00'
       state.running = false
     },
-    continue (state) {
-      state.timer.start()
-      state.running = true
+    action (state, action) {
+      state.action = action
+    },
+    increment (state) {
+      state.counter++
+    },
+    clear (state) {
+      state.counter = 0
+      state.action = ''
     }
   },
   actions: {
     start ({ state, commit, rootState }, startValue) {
-      if (!state.timer.isRunning()) {
-        state.running = true
-
+      state.running = true
+      if (state.timer.isPaused()) {
+        state.timer.start()
+      } else if (!state.timer.isRunning()) {
         state.timer.start({countdown: true,
           startValues: {seconds: startValue},
           callback: function () {
@@ -54,6 +63,22 @@ export default {
           reject()
         })
       })
+    },
+    run ({ commit, dispatch, rootState }) {
+      commit('action', 'PREPARE')
+      dispatch('start', rootState.preper).then(resolve => {
+        dispatch('loop')
+      })
+    },
+    async loop ({ state, commit, dispatch, rootState }) {
+      for (let repetitionCount = 0; repetitionCount < rootState.repetition; repetitionCount++) {
+        commit('increment')
+        commit('action', 'WORKOUT')
+        await dispatch('start', rootState.workout)
+        commit('action', 'REST')
+        await dispatch('start', rootState.interval)
+      }
+      commit('clear')
     }
   }
 }
