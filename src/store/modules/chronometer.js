@@ -10,9 +10,6 @@ export default {
     counter: 0
   },
   mutations: {
-    end (state) {
-      state.running = false
-    },
     beep (state) {
       document.querySelector('audio#beep').play()
     },
@@ -27,16 +24,14 @@ export default {
       state.timer.stop()
       state.display = '00:00'
       state.running = false
+      state.counter = 0
+      state.action = 'PRESS START'
     },
     action (state, action) {
       state.action = action
     },
     increment (state) {
       state.counter++
-    },
-    clear (state) {
-      state.counter = 0
-      state.action = 'PRESS START'
     }
   },
   actions: {
@@ -56,7 +51,6 @@ export default {
       }
       return new Promise((resolve, reject) => {
         state.timer.addEventListener('targetAchieved', function (e) {
-          commit('end')
           resolve('stopped')
         })
         state.timer.addEventListener('stopped', function (e) {
@@ -78,7 +72,7 @@ export default {
         commit('action', 'REST')
         await dispatch('start', rootState.interval)
       }
-      commit('clear')
+      commit('reset')
     }
   }
 }

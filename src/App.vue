@@ -23,7 +23,7 @@
 
     </v-navigation-drawer>
     
-    <v-toolbar  class="light-blue" prominent dark>
+    <v-toolbar fixed class="light-blue" prominent dark>
       <v-toolbar-side-icon @click.native.stop="drawer = !drawer"></v-toolbar-side-icon>
       <v-toolbar-title>Workout</v-toolbar-title>
     </v-toolbar>
